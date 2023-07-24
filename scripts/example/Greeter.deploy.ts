@@ -4,7 +4,7 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 
-import { deployNormal } from '../eno/deploy-game.util';
+import { deployNormal } from '../deploy/deploy.util';
 
 async function main() {
   const greeter = await deployNormal('Greeter', 'Hello, Hardhat!');
