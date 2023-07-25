@@ -131,4 +131,47 @@ describe('StandardERC6551Account', function () {
       });
     });
   });
+
+  describe('executeCall', function () {
+    it('should be execute call transfer eth', async function () {
+      //mint a token to owner
+      const [owner, addr1] = await ethers.getSigners();
+      const accountAddress = await createAccount(owner.address);
+
+      //get owner
+      const accountContract = await ethers.getContractAt(
+        'StandardERC6551Account',
+        accountAddress
+      );
+
+      //transfer 1 Eth to accountAddress from owner
+      await owner.sendTransaction({
+        to: accountAddress,
+        value: ethers.utils.parseEther('1'),
+      });
+
+      //check balance
+      await ethers.provider.getBalance(accountAddress).then((res) => {
+        expect(res).to.equal(ethers.utils.parseEther('1'));
+      });
+
+      //execute call
+      const callData = ethers.utils.defaultAbiCoder.encode([], []);
+
+      //transfer 1 Eth to addr1 from accountAddress
+      await accountContract
+        .connect(owner)
+        .executeCall(addr1.address, ethers.utils.parseEther('1'), callData);
+
+      //check balance
+      await ethers.provider.getBalance(accountAddress).then((res) => {
+        expect(res).to.equal(ethers.utils.parseEther('0'));
+      });
+
+      //check nonce
+      await accountContract.nonce().then((res) => {
+        expect(res).to.equal(1);
+      });
+    });
+  });
 });
