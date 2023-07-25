@@ -9,7 +9,7 @@ import "../interface/IERC6551Account.sol";
 import "../providers/sequence/sstore2/contracts/utils/Bytecode.sol";
 
 contract StandardERC6551Account is IERC165, IERC1271, IERC6551Account {
-    uint256 internal _nonce;
+    mapping(bytes32 => uint256) internal _nonce;
 
     /// @dev Token bound accounts MUST implement a `receive` function.
     receive() external payable {}
@@ -30,7 +30,7 @@ contract StandardERC6551Account is IERC165, IERC1271, IERC6551Account {
             }
         }
 
-        _nonce += 1;
+        _nonce[_nonceId()]++;
     }
 
     function token()
@@ -54,11 +54,17 @@ contract StandardERC6551Account is IERC165, IERC1271, IERC6551Account {
         return IERC721(tokenContract).ownerOf(tokenId);
     }
 
+    function _nonceId() internal view returns (bytes32) {
+        (uint256 chainId, address tokenContract, uint256 tokenId) = this
+            .token();
+        return keccak256(abi.encodePacked(chainId, tokenContract, tokenId));
+    }
+
     /// @dev Returns a nonce value that is updated on every successful transaction
     ///
     /// @return The current account nonce
     function nonce() external view returns (uint256) {
-        return _nonce;
+        return _nonce[_nonceId()];
     }
 
     function supportsInterface(bytes4 interfaceId) public pure returns (bool) {
