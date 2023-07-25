@@ -173,5 +173,78 @@ describe('StandardERC6551Account', function () {
         expect(res).to.equal(1);
       });
     });
+
+    it('should be execute call nft owner of', async function () {
+      //mint a token to owner
+      const [owner, addr1] = await ethers.getSigners();
+      const accountAddress = await createAccount(owner.address);
+
+      //get owner
+      const accountContract = await ethers.getContractAt(
+        'StandardERC6551Account',
+        accountAddress
+      );
+
+      //execute call NFT ownerOf(uint256 tokenId)
+      //create call data with function selector and tokenId
+
+      const callData = ethers.utils.defaultAbiCoder.encode(
+        ['bytes4', 'uint256'],
+        [ethers.utils.id('ownerOf(uint256)').slice(0, 10), 0]
+      );
+
+      console.log('callData', callData);
+
+      //execute call
+      await accountContract
+        .connect(owner)
+        .executeCall(myToken721.address, 0, callData);
+
+      //check nonce
+      await accountContract.nonce().then((res) => {
+        expect(res).to.equal(1);
+      });
+    });
+
+    it('fail to execute', async function () {
+      //mint a token to owner
+      const [owner, addr1] = await ethers.getSigners();
+      const accountAddress = await createAccount(owner.address);
+
+      //get owner
+      const accountContract = await ethers.getContractAt(
+        'StandardERC6551Account',
+        accountAddress
+      );
+
+      //execute call NFT safeTransferFrom(address from, address to, uint256 tokenId)
+      //create call data with function selector and tokenId
+
+      const callData = ethers.utils.defaultAbiCoder.encode(
+        ['bytes4', 'address', 'address', 'uint256'],
+        [
+          ethers.utils
+            .id('safeTransferFrom(address,address,uint256)')
+            .slice(0, 10),
+          owner.address,
+          addr1.address,
+          0,
+        ]
+      );
+
+      console.log('callData', callData);
+
+      //execute call
+      await expect(
+        accountContract
+          .connect(owner)
+          .executeCall(myToken721.address, 0, callData)
+      ).to.be.revertedWithoutReason();
+
+      //check nonce
+      await accountContract.nonce().then((res) => {
+        expect(res).to.equal(0);
+      });
+    });
   });
 });
