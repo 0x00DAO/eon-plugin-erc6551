@@ -33,7 +33,8 @@ describe('StandardERC6551Account', function () {
 
   async function createAccount(
     userAddress: string,
-    userChainId?: number
+    userChainId?: number,
+    tokenId?: number
   ): Promise<string> {
     //mint a token to owner
     const [owner] = await ethers.getSigners();
@@ -45,7 +46,7 @@ describe('StandardERC6551Account', function () {
       standardERC6551Account.address,
       accountChainId,
       myToken721.address,
-      0,
+      tokenId || 0,
       salt
     );
 
@@ -54,7 +55,7 @@ describe('StandardERC6551Account', function () {
       standardERC6551Account.address,
       accountChainId,
       myToken721.address,
-      0,
+      tokenId || 0,
       salt,
       []
     );
@@ -78,6 +79,21 @@ describe('StandardERC6551Account', function () {
         expect(token.chainId).to.equal(chainId);
         expect(token.tokenContract).to.equal(myToken721.address);
         expect(token.tokenId).to.equal(0);
+      });
+
+      //deploy another token
+      const accountAddress1 = await createAccount(owner.address, undefined, 1);
+
+      //get token info
+      const accountContract1 = await ethers.getContractAt(
+        'StandardERC6551Account',
+        accountAddress1
+      );
+
+      await accountContract1.token().then((token) => {
+        expect(token.chainId).to.equal(chainId);
+        expect(token.tokenContract).to.equal(myToken721.address);
+        expect(token.tokenId).to.equal(1);
       });
     });
   });
