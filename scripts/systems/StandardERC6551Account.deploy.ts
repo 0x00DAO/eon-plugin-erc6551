@@ -8,12 +8,7 @@ import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { deployNormalContract } from '../deploy/deploy';
 
 async function main(hre: HardhatRuntimeEnvironment) {
-  const contract = await deployNormalContract(
-    hre,
-    'StandardERC6551Account',
-    [],
-    true
-  );
+  const contract = await deployNormalContract(hre, 'StandardERC6551Account');
   console.log('deployed to:', contract.address);
 }
 

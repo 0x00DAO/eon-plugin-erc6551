@@ -1,5 +1,6 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 const ignoreNetworks = ['hardhat'];
+const manifestVersion = '0.0.2';
 interface ContractDeployData {
   contractName: string;
   address: string | undefined;
@@ -50,7 +51,7 @@ function saveDeployData(chainName: string, chainId: number, deployData: any) {
   //check if file exist
   if (!fs.existsSync(deployFilePath)) {
     //add manifestVersion
-    deployData['manifestVersion'] = '0.0.1';
+    deployData['manifestVersion'] = manifestVersion;
   }
 
   fs.writeFileSync(deployFilePath, JSON.stringify(deployData, null, 2));
@@ -94,14 +95,20 @@ async function saveContractDeployData(
   chainName: string,
   chainId: number,
   contractName: string,
-  address: string
+  address: string,
+  contractNameAlias?: string
 ): Promise<void> {
   //load deploy data from json file
   //json file location: {project_root}/.eon/deploy-data-{chainId}.json
   //load deploy data from json file
   const deployData = loadDeployData(chainName, chainId);
+
+  let contractNameToSave = contractNameAlias ?? contractName;
   //save deploy data
-  deployData[contractName] = makeContractDeployData(contractName, address);
+  deployData[contractNameToSave] = makeContractDeployData(
+    contractName,
+    address
+  );
 
   saveDeployData(chainName, chainId, deployData);
 }
@@ -117,8 +124,15 @@ export async function getContractDeployDataWithHre(
 export async function saveContractDeployDataWithHre(
   hre: HardhatRuntimeEnvironment,
   contractName: string,
-  address: string
+  address: string,
+  contractNameAlias?: string
 ): Promise<void> {
   const id = await getChainId(hre);
-  await saveContractDeployData(hre.network.name, id, contractName, address);
+  await saveContractDeployData(
+    hre.network.name,
+    id,
+    contractName,
+    address,
+    contractNameAlias
+  );
 }

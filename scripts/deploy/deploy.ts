@@ -13,13 +13,14 @@ function getHre() {
 async function _deployDataWith(
   hre: HardhatRuntimeEnvironment,
   contractName: string,
+  contractNameAlias: string,
   deployFunc: (
     hre: HardhatRuntimeEnvironment,
     deployedAddress: string | undefined
   ) => Promise<Contract>,
   forceNew?: boolean
 ): Promise<Contract> {
-  const deployData = await getContractDeployDataWithHre(hre, contractName);
+  const deployData = await getContractDeployDataWithHre(hre, contractNameAlias);
   let deployedContractAddress = deployData.address;
   if (forceNew) {
     deployedContractAddress = undefined;
@@ -27,7 +28,12 @@ async function _deployDataWith(
   let contract = await deployFunc(hre, deployedContractAddress);
 
   //save deploy data
-  await saveContractDeployDataWithHre(hre, contractName, contract.address);
+  await saveContractDeployDataWithHre(
+    hre,
+    contractName,
+    contract.address,
+    contractNameAlias
+  );
   return contract;
 }
 
@@ -38,7 +44,8 @@ export async function deployUpgradeContract(
   initialArgs?: unknown[],
   initialOpts?: DeployProxyOptions,
   forceNew?: boolean,
-  forceImport?: boolean
+  forceImport?: boolean,
+  contractNameAlias?: string
 ): Promise<Contract> {
   const deployData = await getContractDeployDataWithHre(hre, contractName);
   let deployedContractAddress = deployData.address;
@@ -64,11 +71,13 @@ export async function deployNormalContract(
   hre: HardhatRuntimeEnvironment,
   contractName: string,
   initialArgs: any[] = [],
-  forceNew?: boolean
+  forceNew?: boolean,
+  contractNameAlias?: string
 ): Promise<Contract> {
   return _deployDataWith(
     hre,
     contractName,
+    contractNameAlias ?? contractName,
     async (
       hre: HardhatRuntimeEnvironment,
       deployedAddress: string | undefined
