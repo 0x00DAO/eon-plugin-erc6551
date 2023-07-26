@@ -7,8 +7,8 @@
 import { Contract } from 'ethers';
 import { ethers } from 'hardhat';
 import { gameDeploy } from '../consts/deploy.game.const';
+import { deployUpgradeProxy } from '../deploy/deploy';
 import { getContractDeployDataWithHre } from '../deploy/deploy-data';
-import { deployUpgradeProxy } from '../deploy/deploy.util';
 import { deployUtil } from '../eno/deploy-game.util';
 
 const GameRootContractName = 'GameRoot';

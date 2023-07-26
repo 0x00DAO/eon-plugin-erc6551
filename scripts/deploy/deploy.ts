@@ -7,8 +7,7 @@ import {
 } from './deploy-data';
 
 function getHre() {
-  const hre = require('hardhat');
-  return hre;
+  return require('hardhat');
 }
 
 async function _deployDataWith(
@@ -64,7 +63,7 @@ export async function deployUpgradeContract(
 export async function deployNormalContract(
   hre: HardhatRuntimeEnvironment,
   contractName: string,
-  initialArgs: any[],
+  initialArgs: any[] = [],
   forceNew?: boolean
 ): Promise<Contract> {
   return _deployDataWith(

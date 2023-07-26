@@ -4,7 +4,7 @@ import { gameDeploy } from '../scripts/consts/deploy.game.const';
 import {
   deployUpgradeProxy,
   deployUpgradeUpdate,
-} from '../scripts/deploy/deploy.util';
+} from '../scripts/deploy/deploy';
 import { deployUtil } from '../scripts/eno/deploy-game.util';
 
 subtask(
