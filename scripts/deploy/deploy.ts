@@ -47,24 +47,23 @@ export async function deployUpgradeContract(
   forceImport?: boolean,
   contractNameAlias?: string
 ): Promise<Contract> {
-  const deployData = await getContractDeployDataWithHre(hre, contractName);
-  let deployedContractAddress = deployData.address;
-  if (forceNew) {
-    deployedContractAddress = undefined;
-  }
-  let contract: Contract;
-  if (!deployedContractAddress) {
-    contract = await deployUpgradeProxy(contractName, initialArgs, initialOpts);
-  } else {
-    contract = await deployUpgradeUpdate(
-      contractName,
-      deployedContractAddress,
-      forceImport
-    );
-  }
-  //save deploy data
-  await saveContractDeployDataWithHre(hre, contractName, contract.address);
-  return contract;
+  return _deployDataWith(
+    hre,
+    contractName,
+    contractNameAlias ?? contractName,
+    async (
+      hre: HardhatRuntimeEnvironment,
+      deployedAddress: string | undefined
+    ) => {
+      //check if address is exist
+      if (!deployedAddress) {
+        return deployUpgradeProxy(contractName, initialArgs, initialOpts);
+      } else {
+        return deployUpgradeUpdate(contractName, deployedAddress, forceImport);
+      }
+    },
+    forceNew
+  );
 }
 
 export async function deployNormalContract(
