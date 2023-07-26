@@ -1,13 +1,17 @@
 import { Contract } from 'ethers';
 import { task } from 'hardhat/config';
 import { gameDeploy } from '../scripts/consts/deploy.game.const';
-import { getContractDeployDataWithHre } from '../scripts/deploy/deploy-data';
+import { EonDeployData } from '../scripts/deploy/eon-deploy-data.class';
 task(
   'game.systems',
   'Prints the list of game-system',
   async (taskArgs, hre) => {
     const systems = gameDeploy.systems;
-    const deployData = await getContractDeployDataWithHre(hre, 'GameRoot');
+    const eonDeployerData = new EonDeployData();
+    const deployData = await eonDeployerData.getContractDeployDataWithHre(
+      hre,
+      'GameRoot'
+    );
     const contractGameRootAddress = deployData.address;
 
     let gameRootContract: Contract | undefined = undefined;

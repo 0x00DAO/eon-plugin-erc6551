@@ -1,6 +1,6 @@
 import { task, types } from 'hardhat/config';
 import { gameDeploy } from '../scripts/consts/deploy.game.const';
-import { getContractDeployDataWithHre } from '../scripts/deploy/deploy-data';
+import { EonDeployData } from '../scripts/deploy/eon-deploy-data.class';
 import { EonDeploy } from '../scripts/deploy/eon-deploy.class';
 task('game.deploy:game-root', 'Deploys or upgrades the game-root contract')
   .addOptionalParam('new', 'Deploys a new contract', false, types.boolean)
@@ -33,12 +33,12 @@ task(
     types.int
   )
   .setAction(async (taskArgs, hre) => {
-    const gameRootAddress = await getContractDeployDataWithHre(
-      hre,
-      'GameRoot'
-    ).then((deployData: any) => {
-      return deployData.address;
-    });
+    const eonDeployerData = new EonDeployData();
+    const gameRootAddress = await eonDeployerData
+      .getContractDeployDataWithHre(hre, 'GameRoot')
+      .then((deployData: any) => {
+        return deployData.address;
+      });
     const { start, count } = taskArgs;
     const end =
       count == 0
@@ -115,7 +115,11 @@ task(
     types.string
   )
   .setAction(async (taskArgs, hre) => {
-    const deployData = await getContractDeployDataWithHre(hre, 'GameRoot');
+    const eonDeployerData = new EonDeployData();
+    const deployData = await eonDeployerData.getContractDeployDataWithHre(
+      hre,
+      'GameRoot'
+    );
     const gameRootAddress = deployData.address;
     const { start, count, contractNames } = taskArgs;
     const needDeployContracts = [];

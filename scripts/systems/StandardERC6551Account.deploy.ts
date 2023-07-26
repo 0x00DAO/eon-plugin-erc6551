@@ -4,10 +4,9 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 
-import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { EonDeploy } from '../deploy/eon-deploy.class';
 
-async function main(hre: HardhatRuntimeEnvironment) {
+async function main() {
   const deployer = new EonDeploy();
   const contract = await deployer.deployNormalWithData(
     'StandardERC6551Account'
@@ -17,7 +16,7 @@ async function main(hre: HardhatRuntimeEnvironment) {
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
-main(require('hardhat'))
+main()
   .then(() => process.exit(0))
   .catch((error) => {
     console.error(error);

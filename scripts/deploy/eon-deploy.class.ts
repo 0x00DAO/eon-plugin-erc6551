@@ -1,10 +1,7 @@
 import { DeployProxyOptions } from '@openzeppelin/hardhat-upgrades/dist/utils';
 import { Contract, ethers } from 'ethers';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import {
-  getContractDeployDataWithHre,
-  saveContractDeployDataWithHre,
-} from './deploy-data';
+import { EonDeployData } from './eon-deploy-data.class';
 
 export class EonDeploy {
   private getHre() {
@@ -20,7 +17,8 @@ export class EonDeploy {
     ) => Promise<Contract>,
     forceNew?: boolean
   ): Promise<Contract> {
-    const deployData = await getContractDeployDataWithHre(
+    const eonDeployerData = new EonDeployData();
+    const deployData = await eonDeployerData.getContractDeployDataWithHre(
       hre,
       contractNameAlias
     );
@@ -31,7 +29,7 @@ export class EonDeploy {
     let contract = await deployFunc(hre, deployedContractAddress);
 
     //save deploy data
-    await saveContractDeployDataWithHre(
+    await eonDeployerData.saveContractDeployDataWithHre(
       hre,
       contractName,
       contract.address,
