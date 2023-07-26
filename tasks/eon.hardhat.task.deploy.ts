@@ -1,5 +1,8 @@
 import { task, types } from 'hardhat/config';
-import { deployUpgradeContract } from '../scripts/deploy/deploy';
+import {
+  deployNormalContract,
+  deployUpgradeContract,
+} from '../scripts/deploy/deploy';
 
 task(
   'eon.deploy-contract:upgradeable',
@@ -23,4 +26,12 @@ task(
       forceImport,
       forceNew
     );
+  });
+
+task('eon.deploy-contract:normal', 'Deploys a normal contract')
+  .addParam('contractName', 'Contract name')
+  .addOptionalParam('forceNew', 'Deploys a new contract', false, types.boolean)
+  .setAction(async (taskArgs, hre) => {
+    const { contractName, forceNew } = taskArgs;
+    await deployNormalContract(hre, contractName, [], forceNew);
   });

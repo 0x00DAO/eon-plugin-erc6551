@@ -1,7 +1,7 @@
 import { DeployProxyOptions } from '@openzeppelin/hardhat-upgrades/dist/utils';
 import { assert } from 'console';
 import { Contract, ContractTransaction } from 'ethers';
-import { deployUpgradeProxy, deployUpgradeUpdate } from '../deploy/deploy.util';
+import { deployUpgradeProxy, deployUpgradeUpdate } from '../deploy/deploy';
 
 function getHre() {
   const hre = require('hardhat');
