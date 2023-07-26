@@ -38,7 +38,7 @@ async function _deployDataWith(
 }
 
 //deploy or upgrade contract
-export async function deployUpgradeContract(
+export async function deployUpgradeWithDeployData(
   hre: HardhatRuntimeEnvironment,
   contractName: string,
   initialArgs?: unknown[],
@@ -66,7 +66,7 @@ export async function deployUpgradeContract(
   );
 }
 
-export async function deployNormalContract(
+export async function deployNormalWithDeployData(
   hre: HardhatRuntimeEnvironment,
   contractName: string,
   initialArgs: any[] = [],

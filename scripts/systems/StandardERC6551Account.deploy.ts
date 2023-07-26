@@ -5,10 +5,13 @@
 // Runtime Environment's members available in the global scope.
 
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import { deployNormalContract } from '../deploy/deploy';
+import { deployNormalWithDeployData } from '../deploy/deploy';
 
 async function main(hre: HardhatRuntimeEnvironment) {
-  const contract = await deployNormalContract(hre, 'StandardERC6551Account');
+  const contract = await deployNormalWithDeployData(
+    hre,
+    'StandardERC6551Account'
+  );
   console.log('deployed to:', contract.address);
 }
 
