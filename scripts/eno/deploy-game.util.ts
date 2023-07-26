@@ -1,7 +1,7 @@
 import { DeployProxyOptions } from '@openzeppelin/hardhat-upgrades/dist/utils';
 import { assert } from 'console';
 import { Contract, ContractTransaction } from 'ethers';
-import { deployUpgradeProxy, deployUpgradeUpdate } from '../deploy/deploy';
+import { EonDeploy } from '../deploy/Eon-deploy.class';
 
 function getHre() {
   const hre = require('hardhat');
@@ -123,19 +123,21 @@ async function gameSystemDeploy(
     `[deploy contract]:System Contract: ${GameSystemContractName}, address: ${systemContractAddress}`
   );
 
+  const eonDeployer = new EonDeploy();
+
   let contract: Contract;
   if (systemContractAddress == hre.ethers.constants.AddressZero) {
     if (!GameSystemContractArgs) {
       GameSystemContractArgs = [];
     }
-    contract = await deployUpgradeProxy(
+    contract = await eonDeployer.deployUpgradeProxy(
       GameSystemContractName,
       [GameRootContractAddress, ...GameSystemContractArgs],
       opts
     );
     await gameRegisterSystem(gameRootContract, contract.address);
   } else {
-    contract = await deployUpgradeUpdate(
+    contract = await eonDeployer.deployUpgradeUpdate(
       GameSystemContractName,
       systemContractAddress,
       forceImport

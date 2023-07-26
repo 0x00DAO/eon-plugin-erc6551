@@ -1,10 +1,7 @@
 import { assert } from 'console';
 import { subtask, types } from 'hardhat/config';
 import { gameDeploy } from '../scripts/consts/deploy.game.const';
-import {
-  deployUpgradeProxy,
-  deployUpgradeUpdate,
-} from '../scripts/deploy/deploy';
+import { EonDeploy } from '../scripts/deploy/Eon-deploy.class';
 import { deployUtil } from '../scripts/eno/deploy-game.util';
 
 subtask(
@@ -16,10 +13,14 @@ subtask(
   .setAction(async (taskArgs, hre) => {
     const { contractName, contractAddress } = taskArgs;
     let contract;
+    const eonDeployer = new EonDeploy();
     if (!contractAddress) {
-      contract = await deployUpgradeProxy(contractName);
+      contract = await eonDeployer.deployUpgradeProxy(contractName);
     } else {
-      contract = await deployUpgradeUpdate(contractName, contractAddress);
+      contract = await eonDeployer.deployUpgradeUpdate(
+        contractName,
+        contractAddress
+      );
     }
     return contract;
   });

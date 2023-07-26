@@ -7,7 +7,7 @@
 import { Contract } from 'ethers';
 import { ethers } from 'hardhat';
 import { gameDeploy } from '../consts/deploy.game.const';
-import { deployUpgradeProxy } from '../deploy/deploy';
+import { EonDeploy } from '../deploy/Eon-deploy.class';
 import { getContractDeployDataWithHre } from '../deploy/deploy-data';
 import { deployUtil } from '../eno/deploy-game.util';
 
@@ -23,7 +23,8 @@ async function getGameRootAddress(): Promise<string> {
   if (GameRootContractAddress) {
     return GameRootContractAddress;
   }
-  const contract = await deployUpgradeProxy(GameRootContractName);
+  const eonDeployer = new EonDeploy();
+  const contract = await eonDeployer.deployUpgradeProxy(GameRootContractName);
   return contract.address;
 }
 

@@ -4,15 +4,16 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 // const hre = require("hardhat");
-import { deployUpgradeContract } from '../deploy/deploy';
+
+import { EonDeploy } from '../deploy/Eon-deploy.class';
 
 const contractName = 'GameRoot';
 
 async function main() {
   const hre = require('hardhat');
   const isNew = true;
-  const contract = await deployUpgradeContract(
-    hre,
+  const eonDeployer = new EonDeploy();
+  const contract = await eonDeployer.deployUpgradeWithData(
     contractName,
     undefined,
     undefined,

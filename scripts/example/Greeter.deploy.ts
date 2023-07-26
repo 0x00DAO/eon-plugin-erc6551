@@ -4,10 +4,11 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 
-import { deployNormal } from '../deploy/deploy';
+import { EonDeploy } from '../deploy/Eon-deploy.class';
 
 async function main() {
-  const greeter = await deployNormal('Greeter', 'Hello, Hardhat!');
+  const deployer = new EonDeploy();
+  const greeter = await deployer.deployNormal('Greeter', 'Hello, Hardhat!');
   console.log('Greeter deployed to:', greeter.address);
 }
 

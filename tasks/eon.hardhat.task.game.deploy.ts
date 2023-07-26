@@ -1,13 +1,19 @@
 import { task, types } from 'hardhat/config';
 import { gameDeploy } from '../scripts/consts/deploy.game.const';
-import { deployUpgradeContract } from '../scripts/deploy/deploy';
+import { EonDeploy } from '../scripts/deploy/Eon-deploy.class';
 import { getContractDeployDataWithHre } from '../scripts/deploy/deploy-data';
 task('game.deploy:game-root', 'Deploys or upgrades the game-root contract')
   .addOptionalParam('new', 'Deploys a new contract', false, types.boolean)
   .setAction(async (taskArgs, hre) => {
     const { new: isNew } = taskArgs;
     const contractName = 'GameRoot';
-    await deployUpgradeContract(hre, contractName, undefined, undefined, isNew);
+    const eonDeployer = new EonDeploy();
+    await eonDeployer.deployUpgradeWithData(
+      contractName,
+      undefined,
+      undefined,
+      isNew
+    );
   });
 
 task(
