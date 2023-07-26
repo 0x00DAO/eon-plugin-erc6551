@@ -1,7 +1,7 @@
 import { task, types } from 'hardhat/config';
 import { gameDeploy } from '../scripts/consts/deploy.game.const';
-import { EonDeploy } from '../scripts/deploy/Eon-deploy.class';
 import { getContractDeployDataWithHre } from '../scripts/deploy/deploy-data';
+import { EonDeploy } from '../scripts/deploy/eon-deploy.class';
 task('game.deploy:game-root', 'Deploys or upgrades the game-root contract')
   .addOptionalParam('new', 'Deploys a new contract', false, types.boolean)
   .setAction(async (taskArgs, hre) => {

@@ -7,8 +7,8 @@
 import { Contract } from 'ethers';
 import { ethers } from 'hardhat';
 import { gameDeploy } from '../consts/deploy.game.const';
-import { EonDeploy } from '../deploy/Eon-deploy.class';
 import { getContractDeployDataWithHre } from '../deploy/deploy-data';
+import { EonDeploy } from '../deploy/eon-deploy.class';
 import { deployUtil } from '../eno/deploy-game.util';
 
 const GameRootContractName = 'GameRoot';

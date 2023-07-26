@@ -5,7 +5,7 @@
 // Runtime Environment's members available in the global scope.
 // const hre = require("hardhat");
 
-import { EonDeploy } from '../deploy/Eon-deploy.class';
+import { EonDeploy } from '../deploy/eon-deploy.class';
 
 const contractName = 'GameRoot';
 

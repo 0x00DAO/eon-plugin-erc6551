@@ -1,7 +1,7 @@
 import { assert } from 'console';
 import { subtask, types } from 'hardhat/config';
 import { gameDeploy } from '../scripts/consts/deploy.game.const';
-import { EonDeploy } from '../scripts/deploy/Eon-deploy.class';
+import { EonDeploy } from '../scripts/deploy/eon-deploy.class';
 import { deployUtil } from '../scripts/eno/deploy-game.util';
 
 subtask(

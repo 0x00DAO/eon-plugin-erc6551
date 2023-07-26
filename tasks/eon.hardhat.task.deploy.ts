@@ -1,5 +1,5 @@
 import { task, types } from 'hardhat/config';
-import { EonDeploy } from '../scripts/deploy/Eon-deploy.class';
+import { EonDeploy } from '../scripts/deploy/eon-deploy.class';
 
 task(
   'eon.deploy-contract:upgradeable',

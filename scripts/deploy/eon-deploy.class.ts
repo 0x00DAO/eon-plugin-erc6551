@@ -1,5 +1,5 @@
 import { DeployProxyOptions } from '@openzeppelin/hardhat-upgrades/dist/utils';
-import { Contract } from 'ethers';
+import { Contract, ethers } from 'ethers';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import {
   getContractDeployDataWithHre,
@@ -114,23 +114,26 @@ export class EonDeploy {
   ): Promise<Contract> {
     // We get the contract to deploy
     console.log('[deploy contract]:deploy [%s] start', DeployContractName);
-    const [deployer] = await hre.ethers.getSigners();
-    console.log('[deploy contract]:deployer address', deployer.address);
+    const deployer = deployContract.signer;
+    console.log(
+      '[deploy contract]:deployer address',
+      await deployer.getAddress()
+    );
     const deployerBalance = await deployer.getBalance();
     console.log(
       '[deploy contract]:deployer balance before',
-      hre.ethers.utils.formatEther(deployerBalance)
+      ethers.utils.formatEther(deployerBalance)
     );
     await deployContract.deployed();
 
     const deployerBalanceAfter = await deployer.getBalance();
     console.log(
       '[deploy contract]:deployer balance after',
-      hre.ethers.utils.formatEther(deployerBalanceAfter)
+      ethers.utils.formatEther(deployerBalanceAfter)
     );
     console.log(
       '[deploy contract]:deploy gas fee',
-      hre.ethers.utils.formatEther(deployerBalance.sub(deployerBalanceAfter))
+      ethers.utils.formatEther(deployerBalance.sub(deployerBalanceAfter))
     );
     console.log(
       '[deploy contract]:deploy complete! contract: [%s] deployed to: %s',

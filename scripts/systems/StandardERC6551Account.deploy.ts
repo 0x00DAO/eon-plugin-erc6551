@@ -5,7 +5,7 @@
 // Runtime Environment's members available in the global scope.
 
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import { EonDeploy } from '../deploy/Eon-deploy.class';
+import { EonDeploy } from '../deploy/eon-deploy.class';
 
 async function main(hre: HardhatRuntimeEnvironment) {
   const deployer = new EonDeploy();
