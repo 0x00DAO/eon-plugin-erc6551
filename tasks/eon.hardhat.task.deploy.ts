@@ -1,5 +1,5 @@
 import { task, types } from 'hardhat/config';
-import { deployUpgradeContract } from '../scripts/deploy/deploy';
+import { EonDeploy } from '../scripts/deploy/eon-deploy.class';
 
 task(
   'eon.deploy-contract:upgradeable',
@@ -16,11 +16,20 @@ task(
   .setAction(async (taskArgs, hre) => {
     const { forceNew, forceImport } = taskArgs;
     const contractName = 'GameRoot';
-    await deployUpgradeContract(
-      hre,
+    const eonDeployer = new EonDeploy();
+    await eonDeployer.deployUpgradeWithData(
       contractName,
       undefined,
       forceImport,
       forceNew
     );
+  });
+
+task('eon.deploy-contract:normal', 'Deploys a normal contract')
+  .addParam('contractName', 'Contract name')
+  .addOptionalParam('forceNew', 'Deploys a new contract', false, types.boolean)
+  .setAction(async (taskArgs, hre) => {
+    const { contractName, forceNew } = taskArgs;
+    const eonDeployer = new EonDeploy();
+    await eonDeployer.deployNormalWithData(contractName, [], forceNew);
   });

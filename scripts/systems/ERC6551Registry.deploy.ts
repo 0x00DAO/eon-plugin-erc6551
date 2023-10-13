@@ -3,22 +3,13 @@
 //
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
-// const hre = require("hardhat");
 
 import { EonDeploy } from '../deploy/eon-deploy.class';
 
-const contractName = 'GameRoot';
-
 async function main() {
-  const hre = require('hardhat');
-  const isNew = true;
-  const eonDeployer = new EonDeploy();
-  const contract = await eonDeployer.deployUpgradeWithData(
-    contractName,
-    undefined,
-    undefined,
-    isNew
-  );
+  const deployer = new EonDeploy();
+  const contract = await deployer.deployNormalWithData('ERC6551Registry');
+  console.log('deployed to:', contract.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
